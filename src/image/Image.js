@@ -79,7 +79,6 @@ class Image extends React.PureComponent {
                 {...attributes}
                 onLoadEnd={this.onLoadEnd}
                 style={style}
-                source={(attributes.source && attributes.source.url ? attributes.source : require('./transparent-pixel.png'))}
               />
 
               <Animated.View
