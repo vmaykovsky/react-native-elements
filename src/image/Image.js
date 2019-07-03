@@ -70,7 +70,7 @@ class Image extends React.PureComponent {
                 </Animated.View>
               </View>
 
-              <ImageComponent {...attributes} style={style} />
+              <ImageComponent {...attributes} source={(attributes.source && attributes.source.url ? attributes.source : require('./transparent-pixel.png'))} style={style} />
             </React.Fragment>
           ),
           default: (
@@ -79,6 +79,7 @@ class Image extends React.PureComponent {
                 {...attributes}
                 onLoadEnd={this.onLoadEnd}
                 style={style}
+                source={(attributes.source && attributes.source.url ? attributes.source : require('./transparent-pixel.png'))}
               />
 
               <Animated.View
