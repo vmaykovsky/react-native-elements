@@ -72,7 +72,7 @@ class Image extends React.PureComponent {
 
               <ImageComponent
                 {...attributes}
-                source={(attributes.source && attributes.source.url ? attributes.source : require('./transparent-pixel.png'))}
+                source={(attributes.source && attributes.source.uri ? attributes.source : require('./transparent-pixel.png'))}
                 style={style}
               />
             </React.Fragment>
