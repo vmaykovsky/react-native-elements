@@ -45,7 +45,9 @@ const Image = ({
       style={StyleSheet.flatten([styles.container, containerStyle])}
     >
       <ImageComponent
+        defaultSource={require('./transparent-pixel.png')}
         {...attributes}
+        source={(attributes.source && attributes.source.uri ? attributes.source : require('./transparent-pixel.png'))}
         onLoad={onLoad}
         style={[
           StyleSheet.absoluteFill,
