@@ -47,15 +47,12 @@ const Image = ({
       <ImageComponent
         defaultSource={require('./transparent-pixel.png')}
         {...attributes}
-        source={(attributes.source && attributes.source.uri ? attributes.source : require('./transparent-pixel.png'))}
+        source={Platform.OS === 'android' ? (attributes.source && attributes.source.uri ? attributes.source : require('./transparent-pixel.png')) : attributes.source}
         onLoad={onLoad}
-        style={[
+        style={StyleSheet.flatten([
           StyleSheet.absoluteFill,
-          {
-            width: style.width,
-            height: style.height,
-          },
-        ]}
+          style,
+        ])}
         testID="RNE__Image"
       />
 
@@ -96,7 +93,7 @@ const styles = {
     ...StyleSheet.absoluteFillObject,
   },
   placeholder: {
-    backgroundColor: '#bdbdbd',
+    backgroundColor: '#efefef',
     alignItems: 'center',
     justifyContent: 'center',
   },
