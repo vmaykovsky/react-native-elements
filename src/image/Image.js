@@ -31,7 +31,7 @@ const Image = ({
       () => {
         Animated.timing(placeholderOpacity, {
           toValue: 0,
-          duration: 350,
+          duration: 100,
           useNativeDriver: Platform.OS === 'android' ? false : true,
         }).start();
       },
