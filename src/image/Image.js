@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Animated,
@@ -11,25 +11,18 @@ import {
 import { nodeType } from '../helpers';
 import { ViewPropTypes, withTheme } from '../config';
 
-const Image = ({
-  placeholderStyle,
-  PlaceholderContent,
-  containerStyle,
-  style,
-  ImageComponent,
-  children,
-  ...attributes
-}) => {
-  const [placeholderOpacity] = useState(new Animated.Value(1));
-  const hasImage = Boolean(attributes.source);
+class Image extends React.Component {
+  state = {
+    placeholderOpacity: new Animated.Value(1),
+  };
 
-  const onLoad = () => {
+  onLoad = () => {
     const minimumWait = 100;
     const staggerNonce = 200 * Math.random();
 
     setTimeout(
       () => {
-        Animated.timing(placeholderOpacity, {
+        Animated.timing(this.state.placeholderOpacity, {
           toValue: 0,
           duration: 200,
           useNativeDriver: Platform.OS === 'android' ? false : true,
@@ -39,50 +32,63 @@ const Image = ({
     );
   };
 
-  return (
-    <View
-      accessibilityIgnoresInvertColors={true}
-      style={StyleSheet.flatten([styles.container, containerStyle])}
-    >
-      <ImageComponent
-        defaultSource={require('./transparent-pixel.png')}
-        {...attributes}
-        source={Platform.OS === 'android' ? (attributes.source && attributes.source.uri ? attributes.source : require('./transparent-pixel.png')) : attributes.source}
-        onLoad={onLoad}
-        style={StyleSheet.flatten([
-          StyleSheet.absoluteFill,
-          style,
-        ])}
-        testID="RNE__Image"
-      />
+  render() {
+    const {
+      placeholderStyle,
+      PlaceholderContent,
+      containerStyle,
+      style,
+      ImageComponent,
+      children,
+      ...attributes
+    } = this.props;
+    const hasImage = Boolean(attributes.source);
 
-      <Animated.View
-        pointerEvents={hasImage ? 'none' : 'auto'}
-        accessibilityElementsHidden={hasImage}
-        importantForAccessibility={hasImage ? 'no-hide-descendants' : 'yes'}
-        style={[
-          styles.placeholderContainer,
-          {
-            opacity: hasImage ? placeholderOpacity : 1,
-          },
-        ]}
+    return (
+      <View
+        accessibilityIgnoresInvertColors={true}
+        style={StyleSheet.flatten([styles.container, containerStyle])}
       >
-        <View
-          testID="RNE__Image__placeholder"
+        <ImageComponent
+          defaultSource={require('./transparent-pixel.png')}
+          {...attributes}
+          source={Platform.OS === 'android' ? (attributes.source && attributes.source.uri ? attributes.source : require('./transparent-pixel.png')) : attributes.source}
+          onLoad={this.onLoad}
           style={StyleSheet.flatten([
+            StyleSheet.absoluteFill,
             style,
-            styles.placeholder,
-            placeholderStyle,
           ])}
-        >
-          {PlaceholderContent}
-        </View>
-      </Animated.View>
+          testID="RNE__Image"
+        />
 
-      <View style={style}>{children}</View>
-    </View>
-  );
-};
+        <Animated.View
+          pointerEvents={hasImage ? 'none' : 'auto'}
+          accessibilityElementsHidden={hasImage}
+          importantForAccessibility={hasImage ? 'no-hide-descendants' : 'yes'}
+          style={[
+            styles.placeholderContainer,
+            {
+              opacity: hasImage ? this.state.placeholderOpacity : 1,
+            },
+          ]}
+        >
+          <View
+            testID="RNE__Image__placeholder"
+            style={StyleSheet.flatten([
+              style,
+              styles.placeholder,
+              placeholderStyle,
+            ])}
+          >
+            {PlaceholderContent}
+          </View>
+        </Animated.View>
+
+        <View style={style}>{children}</View>
+      </View>
+    );
+  }
+}
 
 const styles = {
   container: {
